@@ -1,5 +1,7 @@
 /* Tic Tac Toe in JavaScript using p5.js (by Kian Acaster)*\
-*  Right now, the code is terrible and it will change drastically when I work on it more.
+*  Current state:
+*  The code's horrific and there's a ton of bugs, the canvas system doesn't work properly and it doesn't switch turns. 
+*  I'll likely end up rewriting most of it.
 *  -- Aims for this project:
 *  • Working CP vs User,
 *  • Online gameplay (maybe),
@@ -11,58 +13,135 @@
 */
 
 
-var turn = 0; // Keeps track of who's turn it is
+var turn = 0;
+var board = ["E","E","E","E","E","E","E","E","E"];	 
+var board;
+var position = [];
+var positions = [0,1,2,3,4,5,6,7,8];
+var indPos;
+var gridPosX; 
+var gridPosY;
 function setup(){
 	createCanvas(610,610);
-	// Generates the grid to play on (3x3)
 	for(var i = 0; i < width; i += width / 3){
 		for(var j = 0; j < height; j += height / 3){
 			rect(i,j,width / 3,height / 3);
 		}
 	}
 }
-
-// A function that draws an X 
+function draw(){
+	for(var i = 0; i < board.length; i++){
+		if(board[i] == "X"){
+			stroke(255,0,0);
+			strokeWeight(5);
+			cross(gridPosX, gridPosY, gridPosX + width / 3, gridPosY + width / 3);	
+		}else if(board[i] == "O"){	
+			stroke(0);
+			ellipse(gridPosX + (width / 3) / 2, gridPosY + (width / 3) / 2, (width / 3) - 10, (height / 3) - 10);
+		}
+	}
+}	
 function cross(x1,y1,x2,y2){
 	line(x1,y1,x2,y2);
 	line(x2,y1,x1,y2);
 }
 
-// If the mouse is pressed...
 function mousePressed(){
-	var gridPosX; // Variables for the X and Y position of the mouse but assigned to 3rds of the canvas
-	var gridPosY;
-	
-	// Testing to see which 3rd of the canvas that the mouse is on, both X and Y, therefore which square it's on
 	if(mouseX > 0 && mouseX < width / 3){
 		gridPosX = 0;
+		position.push(0);
 	}else if(mouseX > width / 3 && mouseX < (width / 3) * 2){
 		gridPosX = width / 3;
+		position.push(1);
 	}else if(mouseX > (width / 3) * 2 && mouseX < width){
 		gridPosX = (width / 3) * 2
+		position.push(2);
 	}
-	
 	if(mouseY > 0 && mouseY < height / 3){
 		gridPosY = 0;
+		position.push(0);
 	}else if(mouseY > height/ 3 && mouseY < (height / 3) * 2){
 		gridPosY = height / 3;
+		position.push(1);
 	}else if(mouseY > (height / 3) * 2 && mouseY < height){
 		gridPosY = (height / 3) * 2
+		position.push(2);		
 	}
-	
-	// Seeing who's turn it is - 0 is X's, 1 is O's
-	if(turn == 0){
-		// If it's X's turn, and the mouse is pressed, draw a cross on the 
-		// square the mouse is on and advance the turn.
-		stroke(255,0,0); 
-		strokeWeight(5);
-		cross(gridPosX, gridPosY, gridPosX + width / 3, gridPosY + width / 3);
-		turn++;
-	}else if(turn == 1){
-		// If it's O's turn, and the mouse is pressed, draw a circle on the 
-		// square the mouse is on and advance (or de-advance) the turn.
-		stroke(0);
-		ellipse(gridPosX + (width / 3) / 2, gridPosY + (width / 3) / 2, (width / 3) - 10, (height / 3) - 10);
-		turn--;
+	if(position[0] == 0 && position[1] == 0){
+		indPos = 0;
+		if(turn == 0){
+			board[0] = "X";
+		}else if(turn == 1){
+			board[0] == "O";
+		}
 	}
+	if(position[0] == 0 && position[1] == 1){
+		indPos = 3;
+		if(turn == 0){
+			board[3] = "X";
+		}else if(turn == 1){ 
+			board[3] == "O";
+		}
+	}
+	if(position[0] == 0 && position[1] == 2){
+		indPos = 6;
+		if(turn == 0){
+			board[6] = "X";
+		}else if(turn == 1){
+			board[6] == "O";
+		}	
+	}
+	if(position[0] == 1 && position[1] == 0){
+		indPos = 2;
+		if(turn == 0){
+			board[2] = "X";
+		}else if(turn == 1){
+			board[2] == "O";
+		}
+	}
+	if(position[0] == 1 && position[1] == 1){
+		indPos = 4;
+		if(turn == 0){
+			board[4] = "X";
+		}else if(turn == 1){
+			board[4] == "O";
+		}	
+	}
+	if(position[0] == 1 && position[1] == 2){
+		indPos = 7;
+		if(turn == 0){
+			board[7] = "X";
+		}else if(turn == 1){
+			board[7] == "O";
+		}	
+	}
+	if(position[0] == 2 && position[1] == 0){
+		indPos = 2;
+		if(turn == 0){
+			board[2] = "X";
+		}else if(turn == 1){
+			board[2] == "O";
+		}	
+	}
+	if(position[0] == 2 && position[1] == 1){
+		indPos = 5;
+		if(turn == 0){
+			board[5] = "X";
+		}else if(turn == 1){
+			board[5] == "O";
+		}	
+	}
+	if(position[0] == 2 && position[1] == 2){
+		indPos = 8;
+		if(turn == 0){
+			board[8] = "X";
+		}else if(turn == 1){
+			board[8] == "O";
+		}	
+	}
+	if(turn == 0){ turn = 1; }else if(turn == 1){ turn = 0; }
+}
+
+function mouseReleased(){
+	position.length = 0;
 }
